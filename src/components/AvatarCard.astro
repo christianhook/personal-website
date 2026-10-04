@@ -6,40 +6,33 @@ interface Props {
 const { showDescription = true } = Astro.props;
 ---
 
-{
-    showDescription ? (
+{showDescription ? (
+    <div>
         <div>
-            <div>
-                <h1
-                    class="font-bold text-3xl md:text-5xl tracking-tight mb-3 text-black dark:text-white text-center md:text-left"
-                >
-                    Christian Krogh Nielsen
-                </h1>
-                <h2 class="text-black dark:text-zinc-50 mb-4 text-center md:text-left text-pretty">
-                    Software Engineer at{" "}
-                    <span class="font-semibold whitespace-nowrap">
-                        Copenhagen{" "}<span class="text-work">Optimization</span>
-                    </span>
-                    <br />
-                    I build and run the{" "}<span class="text-Discord">Discord</span> bot{" "}
-                    <a
-                        class="dark:text-yellow-300 text-yellow-600 underline decoration-yellow-600/30 dark:decoration-yellow-300/30 underline-offset-2 hover:decoration-yellow-600 dark:hover:decoration-yellow-300 transition-colors duration-200"
-                        href="https://bentobot.xyz"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Bento
-                    </a>
-                </h2>
-            </div>
-        </div>
-    ) : (
-        <div>
-            <h1
-                class="font-bold text-3xl md:text-5xl tracking-tight mb-3 text-black dark:text-white text-center md:text-left"
-            >
+            <h1 class="font-bold text-3xl md:text-5xl tracking-tight mb-3 text-black dark:text-white text-center md:text-left">
                 Christian Krogh Nielsen
             </h1>
+            <h2 class="text-black dark:text-white mb-4 text-center md:text-left text-pretty">
+                Software Engineer at{" "}
+                <span class="font-semibold whitespace-nowrap">
+                    Copenhagen <span class="text-work">Optimization</span>
+                </span>
+                <br />I build and run the <span class="text-Discord">Discord</span> bot{" "}
+                <a
+                    class="dark:text-yellow-300 text-yellow-600 underline decoration-yellow-600/30 dark:decoration-yellow-300/30 underline-offset-2 hover:decoration-yellow-600 dark:hover:decoration-yellow-300 transition-colors duration-200"
+                    href="https://bentobot.xyz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Bento
+                </a>
+            </h2>
         </div>
-    )
-}
+    </div>
+) : (
+    <div>
+        <h1 class="font-bold text-3xl md:text-5xl tracking-tight mb-3 text-black dark:text-white text-center md:text-left">
+            Christian Krogh Nielsen
+        </h1>
+    </div>
+)}

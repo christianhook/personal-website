@@ -22,7 +22,7 @@ interface SocialMediaButton {
 export const SOCIAL_MEDIA: SocialMediaButton[] = [
     {
         colour: "GitHub",
-        link: "https://github.com/banner4422",
+        link: "https://github.com/christianhook",
         icon: "GitHubIcon",
         js: false,
     },

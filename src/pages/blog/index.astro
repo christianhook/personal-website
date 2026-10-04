@@ -28,31 +28,27 @@ await Promise.all(
 
 <AppLayout title={`${SITE_TITLE} - Blog`}>
     <PageLayout>
-        <h1
-            class="text-3xl md:text-5xl tracking-tight font-bold mb-6 text-zinc-900 dark:text-zinc-100"
-        >
+        <h1 class="text-3xl md:text-5xl tracking-tight font-bold mb-6 text-black dark:text-white">
             {"Christian's"} Blog
         </h1>
-        <p class="text-lg text-zinc-700 dark:text-zinc-300 mb-6">
+        <p class="text-lg text-black dark:text-white mb-6">
             Welcome to my public blog! Here you'll find blog posts on various topics, including
             technology, personal experiences, and more.
         </p>
         <BlogPosts client:only="svelte" posts={allPosts} slugsToImage={slugsToImage}>
-            {
-                allPosts.length === 0 ? (
-                    <div slot="fallback" class="mb-8">
-                        <SearchAndFilterControls
-                            selectedCategory="all"
-                            sortOrder="newest"
-                            searchTerm=""
-                            categories={["all"]}
-                        />
-                        <p class="text-center text--600 dark:text--400 py-8">No posts found.</p>
-                    </div>
-                ) : (
-                    <BlogSkeleton slot="fallback" postCount={allPosts.length} />
-                )
-            }
+            {allPosts.length === 0 ? (
+                <div slot="fallback" class="mb-8">
+                    <SearchAndFilterControls
+                        selectedCategory="all"
+                        sortOrder="newest"
+                        searchTerm=""
+                        categories={["all"]}
+                    />
+                    <p class="text-center text-black dark:text-white py-8">No posts found.</p>
+                </div>
+            ) : (
+                <BlogSkeleton slot="fallback" postCount={allPosts.length} />
+            )}
         </BlogPosts>
     </PageLayout>
 </AppLayout>

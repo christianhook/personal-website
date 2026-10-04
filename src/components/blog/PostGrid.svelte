@@ -21,16 +21,16 @@
             />
             <div class="p-4">
                 <h3
-                    class="text-xl font-semibold mb-2 text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-700 dark:group-hover:text-zinc-200 group-hover:underline"
+                    class="text-xl font-semibold mb-2 text-black dark:text-white group-hover:underline"
                     title={post.data.title}
                 >
                     {post.data.title}
                 </h3>
-                <div class="flex items-center gap-3 text-zinc-600 dark:text-zinc-400">
+                <div class="flex items-center gap-3 text-black dark:text-white">
                     <span>{formatPostDate(new Date(post.data.pubDate))}</span>
                     {#if post.data.category}
                         <span
-                            class="inline-block text-xs bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-2 py-1 rounded"
+                            class="inline-block text-xs bg-zinc-200 dark:bg-zinc-700 text-black dark:text-white px-2 py-1 rounded"
                             title={post.data.category}
                         >
                             {post.data.category}

@@ -44,6 +44,31 @@
     --loading-indicator-color: #fafafa; /* Dark mode override */
 }
 
+/* Keep neutral long-form copy at the same contrast as the rest of the site. */
+.prose {
+    --tw-prose-body: #000;
+    --tw-prose-headings: #000;
+    --tw-prose-lead: #000;
+    --tw-prose-links: #000;
+    --tw-prose-bold: #000;
+    --tw-prose-counters: #000;
+    --tw-prose-quotes: #000;
+    --tw-prose-captions: #000;
+    --tw-prose-code: #000;
+}
+
+.dark .prose {
+    --tw-prose-invert-body: #fff;
+    --tw-prose-invert-headings: #fff;
+    --tw-prose-invert-lead: #fff;
+    --tw-prose-invert-links: #fff;
+    --tw-prose-invert-bold: #fff;
+    --tw-prose-invert-counters: #fff;
+    --tw-prose-invert-quotes: #fff;
+    --tw-prose-invert-captions: #fff;
+    --tw-prose-invert-code: #fff;
+}
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

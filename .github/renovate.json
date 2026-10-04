@@ -3,7 +3,7 @@
     "extends": ["config:recommended"],
     "timezone": "Europe/Copenhagen",
     "schedule": ["before 6am"],
-    "assignees": ["banner4422"],
+    "assignees": ["christianhook"],
     "rangeStrategy": "bump",
     "packageRules": [
         {

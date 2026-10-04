@@ -16,71 +16,56 @@ const data = await getNowPlaying(
 const loading = !data || typeof data.isPlaying === "undefined";
 ---
 
-<div
-    class="flex flex-row items-center mb-2 space-x-0 sm:space-x-2 w-full px-5 pb-2 sm:pb-0 sm:px-0"
->
+<div class="flex flex-row items-center mb-2 space-x-0 sm:space-x-2 w-full px-5 pb-2 sm:pb-0 sm:px-0">
     <div class="flex flex-row items-center">
-        {
-            loading ? (
-                <LoadingSpinner />
+        {loading ? (
+            <LoadingSpinner />
+        ) : data?.isPlaying ? (
+            <>
+                <div class="hidden sm:flex">
+                    <AnimatedBars />
+                </div>
+                <div class="flex sm:hidden flex-col space-y-2">
+                    <AnimatedBars />
+                    <SpotifyIcon class="h-4 w-4 mt-px text-Spotify" />
+                </div>
+            </>
+        ) : (
+            <SpotifyIcon class="h-4 w-4 mt-px text-Spotify" />
+        )}
+        <div class="inline-flex flex-col sm:flex-row w-full max-w-full truncate ml-2">
+            {loading ? (
+                <>
+                    <p class="text-black dark:text-white font-medium">Not Playing</p>
+                    <span class="mx-2 text-black dark:text-white hidden sm:flex"> – </span>
+                    <p class="text-black dark:text-white max-w-max truncate">Spotify</p>
+                </>
             ) : data?.isPlaying ? (
                 <>
-                    <div class="hidden sm:flex">
-                        <AnimatedBars />
-                    </div>
-                    <div class="flex sm:hidden flex-col space-y-2">
-                        <AnimatedBars />
-                        <SpotifyIcon class="h-4 w-4 mt-px text-Spotify" />
-                    </div>
+                    <a
+                        class="text-black dark:text-white font-medium max-w-fit w-72 sm:w-60 md:w-40 truncate hover:underline"
+                        href={data.songUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={data.title}
+                    >
+                        {data.title}
+                    </a>
+                    <span class="hidden sm:flex mx-2 text-black dark:text-white"> – </span>
+                    <p
+                        class="text-black dark:text-white max-w-fit w-72 sm:w-60 md:w-40 truncate"
+                        title={data.artist}
+                    >
+                        {data.artist}
+                    </p>
                 </>
             ) : (
-                <SpotifyIcon class="h-4 w-4 mt-px text-Spotify" />
-            )
-        }
-        <div class="inline-flex flex-col sm:flex-row w-full max-w-full truncate ml-2">
-            {
-                loading ? (
-                    <>
-                        <p class="text-zinc-800 dark:text-zinc-200 font-medium">Not Playing</p>
-                        <span class="mx-2 text-zinc-500 dark:text-zinc-300 hidden sm:flex">
-                            {" "}
-                            –{" "}
-                        </span>
-                        <p class="text-zinc-500 dark:text-zinc-300 max-w-max truncate">Spotify</p>
-                    </>
-                ) : data?.isPlaying ? (
-                    <>
-                        <a
-                            class="text-zinc-800 dark:text-zinc-200 font-medium max-w-fit w-72 sm:w-60 md:w-40 truncate hover:underline"
-                            href={data.songUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={data.title}
-                        >
-                            {data.title}
-                        </a>
-                        <span class="hidden sm:flex mx-2 text-zinc-500 dark:text-zinc-300">
-                            {" "}
-                            –{" "}
-                        </span>
-                        <p
-                            class="text-zinc-500 dark:text-zinc-300 max-w-fit w-72 sm:w-60 md:w-40 truncate"
-                            title={data.artist}
-                        >
-                            {data.artist}
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <p class="text-zinc-800 dark:text-zinc-200 font-medium">Not Playing</p>
-                        <span class="hidden sm:flex mx-2 text-zinc-500 dark:text-zinc-300">
-                            {" "}
-                            –{" "}
-                        </span>
-                        <p class="text-zinc-500 dark:text-zinc-300 max-w-max truncate">Spotify</p>
-                    </>
-                )
-            }
+                <>
+                    <p class="text-black dark:text-white font-medium">Not Playing</p>
+                    <span class="hidden sm:flex mx-2 text-black dark:text-white"> – </span>
+                    <p class="text-black dark:text-white max-w-max truncate">Spotify</p>
+                </>
+            )}
         </div>
     </div>
 </div>

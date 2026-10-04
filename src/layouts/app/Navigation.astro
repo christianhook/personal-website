@@ -1,6 +1,5 @@
 ---
 import AppearanceModeSwitch from "../../components/app/AppearanceModeSwitch.svelte";
-import MobileMenu from "../../components/app/MobileMenu.svelte";
 
 let currentPath = Astro.url.pathname;
 
@@ -19,33 +18,67 @@ const isCurrentRoute = (route: string): boolean => {
 };
 ---
 
-<header class="flex flex-col items-center w-full">
-    <nav class="flex items-center justify-between w-full max-w-2xl px-4 md:px-8 sm:py-8 py-4">
-        <div class="sm:hidden">
-            <MobileMenu navigationRoutes={navigationRoutes} currentPath={currentPath} client:load />
-        </div>
-
-        <div class="hidden sm:flex ml-0">
-            {
-                navigationRoutes.map((route) => (
-                    <>
-                        <span class="sr-only">{route.name}</span>
-                        <a
-                            href={route.route}
-                            data-astro-prefetch
-                            class={`p-1 px-3 py-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-300 ${
-                                isCurrentRoute(route.route)
-                                    ? "font-semibold text-zinc-800 dark:text-zinc-200"
-                                    : "font-normal text-zinc-600 dark:text-zinc-400"
-                            }`}
-                        >
-                            {route.name}
-                        </a>
-                    </>
-                ))
-            }
+<header class="hidden sm:flex flex-col items-center w-full">
+    <nav
+        aria-label="Main navigation"
+        class="flex items-center justify-between w-full max-w-2xl px-4 md:px-8 py-8"
+    >
+        <div class="flex gap-2">
+            {navigationRoutes.map((route) => (
+                <a
+                    href={route.route}
+                    data-astro-prefetch
+                    aria-current={isCurrentRoute(route.route) ? "page" : undefined}
+                    class={`p-1 px-3 py-2 rounded-lg text-black dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-300 ${
+                        isCurrentRoute(route.route)
+                            ? "font-semibold bg-zinc-200 dark:bg-zinc-800"
+                            : "font-normal"
+                    }`}
+                >
+                    {route.name}
+                </a>
+            ))}
         </div>
 
         <AppearanceModeSwitch client:load />
     </nav>
 </header>
+
+<nav
+    aria-label="Mobile navigation"
+    class="sm:hidden fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-zinc-50/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95"
+>
+    <div class="mx-auto flex max-w-2xl items-center justify-between gap-1.5 px-2 min-[360px]:gap-2 min-[360px]:px-4 pt-1 pb-[calc(0.25rem+env(safe-area-inset-bottom))]">
+        {navigationRoutes.map((route) => (
+            <a
+                href={route.route}
+                data-astro-prefetch
+                aria-label={route.name === "Home" ? "Home" : undefined}
+                aria-current={isCurrentRoute(route.route) ? "page" : undefined}
+                class={`group flex h-11 min-w-11 items-center justify-center rounded-lg text-sm text-black dark:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-700 dark:focus-visible:outline-zinc-300 ${isCurrentRoute(route.route) ? "font-semibold" : "font-normal"}`}
+            >
+                <span
+                    class={`inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg px-1.5 py-1.5 transition-colors group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 ${isCurrentRoute(route.route) ? "bg-zinc-200 dark:bg-zinc-800" : ""}`}
+                >
+                    {route.name === "Home" ? (
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                        >
+                            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z" />
+                        </svg>
+                    ) : (
+                        route.name
+                    )}
+                </span>
+            </a>
+        ))}
+        <AppearanceModeSwitch client:load />
+    </div>
+</nav>

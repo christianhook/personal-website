@@ -17,63 +17,73 @@ const description = "What is Christian Krogh Nielsen up to these days?";
 <AppLayout title={title} description={description}>
     <PageLayout>
         <h1 class="text-3xl md:text-5xl tracking-tight font-bold mb-6">Now</h1>
-        <p class="text-zinc-700 dark:text-zinc-200 mb-8 text-lg">
+        <p class="text-black dark:text-white mb-8 text-lg">
             What's <strong>Christian</strong> up to these days?
         </p>
 
         <ul class="list-none p-0 flex flex-col">
-            {
-                statuses[0] && <NowStatus status={statuses[0]} />
-            }
-            {
-                statuses.length > 1 && (
-                    <li id="older-statuses" class="grid grid-cols-[1rem_1fr] gap-x-4 relative" data-count={statuses.length}>
-                        <div class="absolute w-0.5 bg-zinc-800 dark:bg-zinc-200 top-0 bottom-0 left-[7px]" aria-hidden="true" />
-                        <div class="col-start-2 relative pb-8">
-                            <div class="relative min-h-36 overflow-hidden flex items-center justify-center">
-                                <p id="older-status-preview" class="absolute inset-0 m-0 text-lg leading-relaxed text-black dark:text-zinc-200 blur-[5px] opacity-45 select-none pointer-events-none" style="mask-image: linear-gradient(to right, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent)" aria-hidden="true">
-                                    {getStatusPreview(statuses[1])}
-                                </p>
-                                <button
-                                    id="load-older-status"
-                                    type="button"
-                                    class="relative cursor-pointer rounded-lg bg-zinc-900 px-4 py-2 text-white font-semibold shadow-sm hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
-                                >
-                                    Load an older status
-                                </button>
-                            </div>
-                            <span id="older-status-error" class="text-sm text-red-700 dark:text-red-300 mt-2" role="status" hidden>
-                                Could not load the status. Please try again.
-                            </span>
+            {statuses[0] && <NowStatus status={statuses[0]} />}
+            {statuses.length > 1 && (
+                <li
+                    id="older-statuses"
+                    class="grid grid-cols-[1rem_1fr] gap-x-4 relative"
+                    data-count={statuses.length}
+                >
+                    <div
+                        class="absolute w-0.5 bg-zinc-800 dark:bg-zinc-200 top-0 bottom-0 left-[7px]"
+                        aria-hidden="true"
+                    />
+                    <div class="col-start-2 relative pb-8">
+                        <div class="relative min-h-36 overflow-hidden flex items-center justify-center">
+                            <p
+                                id="older-status-preview"
+                                class="absolute inset-0 m-0 text-lg leading-relaxed text-black dark:text-white blur-[5px] opacity-45 select-none pointer-events-none"
+                                style="mask-image: linear-gradient(to right, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent)"
+                                aria-hidden="true"
+                            >
+                                {getStatusPreview(statuses[1])}
+                            </p>
+                            <button
+                                id="load-older-status"
+                                type="button"
+                                class="relative cursor-pointer rounded-lg bg-zinc-900 px-4 py-2 text-white font-semibold shadow-sm hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 disabled:opacity-60 dark:bg-zinc-100 dark:text-black dark:hover:bg-zinc-300"
+                            >
+                                Load an older status
+                            </button>
                         </div>
-                    </li>
-                )
-            }
+                        <span
+                            id="older-status-error"
+                            class="text-sm text-red-700 dark:text-red-300 mt-2"
+                            role="status"
+                            hidden
+                        >
+                            Could not load the status. Please try again.
+                        </span>
+                    </div>
+                </li>
+            )}
             <li class="grid grid-cols-[1rem_1fr] gap-x-4 justify-center relative mb-6">
                 <div
                     class="relative z-10 rounded-full w-4 h-4 bg-zinc-800 dark:bg-zinc-200 place-self-center"
                     aria-hidden="true"
-                >
-                </div>
-                <span class="text-zinc-800 dark:text-zinc-100 font-bold">A while ago</span>
+                ></div>
+                <span class="text-black dark:text-white font-bold">A while ago</span>
                 <div
                     class="absolute w-0.5 h-3 bg-zinc-800 dark:bg-zinc-200 top-0 left-[7px]"
                     aria-hidden="true"
-                >
-                </div>
-                <div
-                    class="col-start-2 col-end-3 row-start-2 prose prose-lg dark:prose-invert prose-headings:text-zinc-900 dark:prose-headings:text-zinc-100 prose-p:text-black dark:prose-p:text-zinc-200 prose-a:font-semibold prose-code:dark:bg-zinc-800 prose-code:bg-zinc-200 prose-img:rounded-lg max-w-none"
-                >
+                ></div>
+                <div class="col-start-2 col-end-3 row-start-2 prose prose-lg dark:prose-invert prose-headings:text-black dark:prose-headings:text-white prose-p:text-black dark:prose-p:text-white prose-a:font-semibold prose-code:dark:bg-zinc-800 prose-code:bg-zinc-200 prose-img:rounded-lg max-w-none">
                     <p>
-                        I discovered <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://nownownow.com/">nownownow</a
-                        >, which talks about having a <code>/now</code> page for sharing brief updates
-                        on how things are going <strong>right now</strong> at this point in time, like
-                        if you are catching up with a friend for the first time in a while. Like what
-                        are you up to? What are you spending your time on? What are you excited about?
-                        I think it sounds quite cool, so I decided to make one for myself.
+                        I discovered{" "}
+                        <a target="_blank" rel="noopener noreferrer" href="https://nownownow.com/">
+                            nownownow
+                        </a>
+                        , which talks about having a <code>/now</code> page for sharing brief
+                        updates on how things are going <strong>right now</strong> at this point in
+                        time, like if you are catching up with a friend for the first time in a
+                        while. Like what are you up to? What are you spending your time on? What are
+                        you excited about? I think it sounds quite cool, so I decided to make one
+                        for myself.
                     </p>
                 </div>
             </li>
@@ -90,9 +100,8 @@ const description = "What is Christian Krogh Nielsen up to these days?";
     function updateStatusDates() {
         document.querySelectorAll<HTMLTimeElement>("time[data-now-status]").forEach((time) => {
             const date = dayjs(time.dateTime);
-            time.textContent = dayjs().diff(date, "day") < 2
-                ? date.fromNow()
-                : (time.dataset.absoluteDate ?? "");
+            time.textContent =
+                dayjs().diff(date, "day") < 2 ? date.fromNow() : (time.dataset.absoluteDate ?? "");
         });
     }
 

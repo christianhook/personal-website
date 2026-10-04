@@ -22,7 +22,10 @@ const timestampFormatter = new Intl.DateTimeFormat("en-US", {
 });
 ---
 
-<li class="grid grid-cols-[1rem_1fr] gap-x-4 justify-center relative" data-next-preview={nextPreview}>
+<li
+    class="grid grid-cols-[1rem_1fr] gap-x-4 justify-center relative"
+    data-next-preview={nextPreview}
+>
     <div
         class="rounded-full w-4 h-4 bg-zinc-800 dark:bg-zinc-200 place-self-center"
         aria-hidden="true"
@@ -32,7 +35,7 @@ const timestampFormatter = new Intl.DateTimeFormat("en-US", {
         title={timestampFormatter.format(status.data.date)}
         data-now-status
         data-absolute-date={dateFormatter.format(status.data.date)}
-        class="text-zinc-800 dark:text-zinc-100 font-bold"
+        class="text-black dark:text-white font-bold"
     >
         {dateFormatter.format(status.data.date)}
     </time>
@@ -41,7 +44,7 @@ const timestampFormatter = new Intl.DateTimeFormat("en-US", {
         aria-hidden="true"
     />
     <div class="col-start-2 col-end-3 row-start-2 pb-8">
-        <div class="prose prose-lg dark:prose-invert prose-headings:text-zinc-900 dark:prose-headings:text-zinc-100 prose-p:text-black dark:prose-p:text-zinc-200 prose-a:font-semibold prose-code:dark:bg-zinc-800 prose-code:bg-zinc-200 prose-img:rounded-lg max-w-none">
+        <div class="prose prose-lg dark:prose-invert prose-headings:text-black dark:prose-headings:text-white prose-p:text-black dark:prose-p:text-white prose-a:font-semibold prose-code:dark:bg-zinc-800 prose-code:bg-zinc-200 prose-img:rounded-lg max-w-none">
             <Content />
         </div>
     </div>
