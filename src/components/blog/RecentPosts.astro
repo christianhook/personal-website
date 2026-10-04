@@ -11,47 +11,45 @@ export interface Props {
 const { posts } = Astro.props;
 ---
 
-{
-    posts.length > 0 && (
-        <div>
-            <h2 class="text-xl font-semibold mb-4">Recent Posts</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {posts.map((post) => (
-                    <a
-                        data-astro-prefetch
-                        href={`/blog/${post.id}/`}
-                        class="group block p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+{posts.length > 0 && (
+    <div>
+        <h2 class="text-xl font-semibold mb-4">Recent Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {posts.map((post) => (
+                <a
+                    data-astro-prefetch
+                    href={`/blog/${post.id}/`}
+                    class="group block p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+                >
+                    {post.data.heroImage && (
+                        <Image
+                            src={post.data.heroImage}
+                            width={136.66}
+                            height={128}
+                            alt={`${post.data.title} - ${post.data.description}`}
+                            class="w-full h-32 object-cover rounded-lg mb-2 group-hover:shadow-lg"
+                            loading="lazy"
+                        />
+                    )}
+                    <h4
+                        class="font-medium text-black dark:text-white group-hover:underline"
+                        title={post.data.title}
                     >
-                        {post.data.heroImage && (
-                            <Image
-                                src={post.data.heroImage}
-                                width={136.66}
-                                height={128}
-                                alt={`${post.data.title} - ${post.data.description}`}
-                                class="w-full h-32 object-cover rounded-lg mb-2 group-hover:shadow-lg"
-                                loading="lazy"
-                            />
-                        )}
-                        <h4
-                            class="font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-700 dark:group-hover:text-zinc-200 group-hover:underline"
-                            title={post.data.title}
+                        {post.data.title}
+                    </h4>
+                    <p class="text-sm text-black dark:text-white">
+                        <FormattedDate date={post.data.pubDate} format="post" />
+                    </p>
+                    {post.data.category && (
+                        <span
+                            class="inline-block mt-1 text-xs bg-zinc-200 dark:bg-zinc-700 text-black dark:text-white px-2 py-1 rounded"
+                            title={post.data.category}
                         >
-                            {post.data.title}
-                        </h4>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                            <FormattedDate date={post.data.pubDate} format="post" />
-                        </p>
-                        {post.data.category && (
-                            <span
-                                class="inline-block mt-1 text-xs bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-2 py-1 rounded"
-                                title={post.data.category}
-                            >
-                                {post.data.category}
-                            </span>
-                        )}
-                    </a>
-                ))}
-            </div>
+                            {post.data.category}
+                        </span>
+                    )}
+                </a>
+            ))}
         </div>
-    )
-}
+    </div>
+)}

@@ -58,7 +58,7 @@
     />
 
     {#if filtered.length === 0}
-        <p class="text-center text--600 dark:text--400 py-8">No posts found.</p>
+        <p class="text-center text-black dark:text-white py-8">No posts found.</p>
     {:else}
         {#if featuredPost}
             <FeaturedPost post={featuredPost} {slugsToImage} />

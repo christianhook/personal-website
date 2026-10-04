@@ -9,7 +9,7 @@ Credits to [Lee Robinson](https://github.com/leerob/leerob.io) for design inspir
 
 ## How to set up and run this locally
 
-1. Create a `.env` with the following elements seen in the [.env.example](https://github.com/banner4422/personal-website/blob/master/.env.example) file
+1. Create a `.env` with the following elements seen in the [.env.example](https://github.com/christianhook/personal-website/blob/master/.env.example) file
 2. `npm install`
 3. `npm run dev`
 

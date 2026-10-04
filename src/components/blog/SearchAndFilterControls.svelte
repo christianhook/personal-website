@@ -31,7 +31,7 @@
                     "w-full h-full pl-10",
                     "focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:focus:ring-zinc-400",
                     "border border-zinc-300 dark:border-zinc-700 rounded-md",
-                    "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
+                    "bg-white dark:bg-zinc-800 text-black dark:text-white",
                     "h-10 p-2",
                     "hover:bg-zinc-100 dark:hover:bg-zinc-700"
                 )}
@@ -51,8 +51,8 @@
                     "overflow-hidden text-ellipsis cursor-pointer appearance-none",
                     "border border-zinc-300 dark:border-zinc-700 rounded-md",
                     selectedCategory !== "all"
-                        ? "bg-zinc-100 dark:bg-zinc-600 text-zinc-900 dark:text-zinc-100"
-                        : "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
+                        ? "bg-zinc-100 dark:bg-zinc-600 text-black dark:text-white"
+                        : "bg-white dark:bg-zinc-800 text-black dark:text-white",
                     "h-10 p-2",
                     "hover:bg-zinc-100 dark:hover:bg-zinc-700"
                 )}
@@ -78,8 +78,8 @@
                 "cursor-pointer",
                 "border border-zinc-300 dark:border-zinc-700 rounded-md",
                 sortOrder !== "newest"
-                    ? "bg-zinc-100 dark:bg-zinc-600 text-zinc-900 dark:text-zinc-100"
-                    : "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
+                    ? "bg-zinc-100 dark:bg-zinc-600 text-black dark:text-white"
+                    : "bg-white dark:bg-zinc-800 text-black dark:text-white",
                 "h-10 p-2",
                 "hover:bg-zinc-100 dark:hover:bg-zinc-700"
             )}
