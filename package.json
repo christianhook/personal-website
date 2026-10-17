@@ -40,7 +40,7 @@
         "@tailwindcss/typography": "^0.5.20",
         "@tailwindcss/vite": "^4.3.3",
         "@types/luxon": "^3.7.6",
-        "@typescript-eslint/parser": "^8.71.0",
+        "@typescript-eslint/parser": "^8.71.2",
         "astro": "^7.3.8",
         "eslint": "^10.11.0",
         "eslint-config-prettier": "^10.1.8",
@@ -55,7 +55,7 @@
         "svelte": "^5.57.2",
         "tailwindcss": "^4.3.3",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.71.0",
+        "typescript-eslint": "^8.71.2",
         "vitest": "^5.0.4",
         "wrangler": "^4.145.0"
     },
