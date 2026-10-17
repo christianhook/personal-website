@@ -11,6 +11,4 @@ const { date, format = "article" } = Astro.props;
 const formattedDate = format === "article" ? formatArticleDate(date) : formatPostDate(date);
 ---
 
-<time datetime={date.toISOString()}>
-    {formattedDate}
-</time>
+<time datetime={date.toISOString()}>{formattedDate}</time>

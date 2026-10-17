@@ -19,17 +19,13 @@ const iconMap: Record<string, typeof GitHubIcon> = {
 };
 ---
 
-<div
-    class="w-full grid grid-cols-2 justify-items-center md:grid-cols-3 justify-center gap-4 md:gap-x-16 pb-4"
->
-    {
-        SOCIAL_MEDIA.map((button) => {
-            const Icon = button.icon ? iconMap[button.icon] : null;
-            return (
-                <SocialMediaButton colour={button.colour} link={button.link} js={button.js}>
-                    {Icon && <Icon />}
-                </SocialMediaButton>
-            );
-        })
-    }
+<div class="w-full grid grid-cols-2 justify-items-center md:grid-cols-3 justify-center gap-4 md:gap-x-16 pb-4">
+    {SOCIAL_MEDIA.map((button) => {
+        const Icon = button.icon ? iconMap[button.icon] : null;
+        return (
+            <SocialMediaButton colour={button.colour} link={button.link} js={button.js}>
+                {Icon && <Icon />}
+            </SocialMediaButton>
+        );
+    })}
 </div>

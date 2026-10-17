@@ -123,7 +123,9 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
     const applyTheme = (isDark) => {
         document.documentElement.classList.toggle("dark", isDark);
         document.documentElement.style.colorScheme = isDark ? "dark" : "light";
-        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", isDark ? "#000000" : "#ffffff");
+        document
+            .querySelector('meta[name="theme-color"]')
+            ?.setAttribute("content", isDark ? "#000000" : "#ffffff");
     };
 
     const savedTheme = localStorage.getItem("theme");
