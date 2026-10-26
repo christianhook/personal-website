@@ -60,7 +60,7 @@
         "wrangler": "^4.151.3"
     },
     "overrides": {
-        "runed": "0.37.1",
+        "runed": "0.38.0",
         "svelte-toolbelt": "0.10.6",
         "typescript": "^6.0.3"
     }
