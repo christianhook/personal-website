@@ -31,6 +31,16 @@ export default [
         },
     },
 
+    // Static browser scripts served from public/
+    {
+        files: ["public/scripts/**/*.js"],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
+        },
+    },
+
     // Configuration for Svelte files with TypeScript
     ...sveltePlugin.configs.recommended,
     {

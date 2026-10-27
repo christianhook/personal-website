@@ -4,8 +4,8 @@ const cspDirectives: Record<string, string> = {
     "script-src": "'self' 'unsafe-inline' data:",
     // unsafe-inline required for Svelte inline styles and Tailwind CSS
     "style-src": "'self' 'unsafe-inline'",
-    // data: for inline SVG images
-    "img-src": "'self' data:",
+    // data: for inline SVG images; i.scdn.co serves Spotify album artwork
+    "img-src": "'self' data: https://i.scdn.co",
     // fonts are self-hosted
     "font-src": "'self'",
     // no client-side API calls to external services

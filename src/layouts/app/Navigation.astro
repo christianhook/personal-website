@@ -3,19 +3,19 @@ import AppearanceModeSwitch from "../../components/app/AppearanceModeSwitch.svel
 
 let currentPath = Astro.url.pathname;
 
-const navigationRoutes = [
-    { name: "Home", route: "/" },
-    { name: "About", route: "/about" },
-    { name: "Blog", route: "/blog" },
-    { name: "Now", route: "/now" },
-];
-
 const isCurrentRoute = (route: string): boolean => {
     if (!currentPath) return false;
     return route === "/"
         ? currentPath === "/"
         : currentPath === route || currentPath.startsWith(route + "/");
 };
+
+const navigationRoutes = [
+    { name: "Home", route: "/" },
+    { name: "About", route: "/about" },
+    { name: "Blog", route: "/blog" },
+    { name: "Now", route: "/now" },
+].map((route) => ({ ...route, isCurrent: isCurrentRoute(route.route) }));
 ---
 
 <header class="hidden sm:flex flex-col items-center w-full">
@@ -28,14 +28,28 @@ const isCurrentRoute = (route: string): boolean => {
                 <a
                     href={route.route}
                     data-astro-prefetch
-                    aria-current={isCurrentRoute(route.route) ? "page" : undefined}
+                    aria-current={route.isCurrent ? "page" : undefined}
                     class={`p-1 px-3 py-2 rounded-lg text-black dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-300 ${
-                        isCurrentRoute(route.route)
-                            ? "font-semibold bg-zinc-200 dark:bg-zinc-800"
-                            : "font-normal"
+                        route.isCurrent ? "bg-zinc-200 dark:bg-zinc-800" : ""
                     }`}
                 >
-                    {route.name}
+                    {/* The hidden bold copy reserves the width the active state needs, so
+                        switching pages cannot shift the navigation. */}
+                    <span class="inline-grid">
+                        <span
+                            class={`col-start-1 row-start-1 ${
+                                route.isCurrent ? "font-semibold" : "font-normal"
+                            }`}
+                        >
+                            {route.name}
+                        </span>
+                        <span
+                            class="col-start-1 row-start-1 invisible font-semibold"
+                            aria-hidden="true"
+                        >
+                            {route.name}
+                        </span>
+                    </span>
                 </a>
             ))}
         </div>
@@ -54,11 +68,11 @@ const isCurrentRoute = (route: string): boolean => {
                 href={route.route}
                 data-astro-prefetch
                 aria-label={route.name === "Home" ? "Home" : undefined}
-                aria-current={isCurrentRoute(route.route) ? "page" : undefined}
-                class={`group flex h-11 min-w-11 items-center justify-center rounded-lg text-sm text-black dark:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-700 dark:focus-visible:outline-zinc-300 ${isCurrentRoute(route.route) ? "font-semibold" : "font-normal"}`}
+                aria-current={route.isCurrent ? "page" : undefined}
+                class="group flex h-11 min-w-11 items-center justify-center rounded-lg text-sm text-black dark:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-700 dark:focus-visible:outline-zinc-300"
             >
                 <span
-                    class={`inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg px-1.5 py-1.5 transition-colors group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 ${isCurrentRoute(route.route) ? "bg-zinc-200 dark:bg-zinc-800" : ""}`}
+                    class={`inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg px-1.5 py-1.5 transition-colors group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 ${route.isCurrent ? "bg-zinc-200 dark:bg-zinc-800" : ""}`}
                 >
                     {route.name === "Home" ? (
                         <svg
@@ -74,7 +88,21 @@ const isCurrentRoute = (route: string): boolean => {
                             <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z" />
                         </svg>
                     ) : (
-                        route.name
+                        <span class="inline-grid">
+                            <span
+                                class={`col-start-1 row-start-1 ${
+                                    route.isCurrent ? "font-semibold" : "font-normal"
+                                }`}
+                            >
+                                {route.name}
+                            </span>
+                            <span
+                                class="col-start-1 row-start-1 invisible font-semibold"
+                                aria-hidden="true"
+                            >
+                                {route.name}
+                            </span>
+                        </span>
                     )}
                 </span>
             </a>

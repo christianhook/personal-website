@@ -1,0 +1,87 @@
+---
+import AppLayout from "../layouts/app/AppLayout.astro";
+import PageLayout from "../layouts/PageLayout.astro";
+import SpotifyIcon from "../components/icons/SpotifyIcon.astro";
+import { getTopTracks } from "../lib/spotify";
+import { env } from "cloudflare:workers";
+
+const tracks = await getTopTracks(
+    {
+        clientId: env.SPOTIFY_CLIENT_ID,
+        clientSecret: env.SPOTIFY_CLIENT_SECRET,
+        refreshToken: env.SPOTIFY_REFRESH_TOKEN,
+    },
+    env.SESSION
+);
+
+const title = "On Repeat";
+const description = "Christian's 10 most-played tracks on Spotify over the past few weeks.";
+---
+
+<AppLayout title={title} description={description}>
+    <PageLayout>
+        <h1 class="text-3xl md:text-5xl tracking-tight font-bold mb-6">On Repeat</h1>
+        <p class="text-lg text-black dark:text-white mb-8">
+            My 10 most-played tracks from the past few weeks on{" "}
+            <span class="whitespace-nowrap font-medium text-Spotify">
+                <SpotifyIcon class="mr-1 inline-block h-4 w-4 align-[-2px]" />
+                Spotify
+            </span>
+            .
+        </p>
+
+        {tracks.length > 0 ? (
+            <ol class="flex flex-col gap-1 pb-6">
+                {tracks.map((track, index) => (
+                    <li>
+                        <a
+                            href={track.songUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group -mx-2 flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-700 dark:hover:bg-zinc-800/60 dark:focus-visible:outline-zinc-300"
+                        >
+                            <span
+                                class="w-5 shrink-0 text-right text-sm tabular-nums text-zinc-400 dark:text-zinc-500"
+                                aria-hidden="true"
+                            >
+                                {index + 1}
+                            </span>
+                            {track.albumImageUrl ? (
+                                <img
+                                    src={track.albumImageUrl}
+                                    alt=""
+                                    width={56}
+                                    height={56}
+                                    loading={index < 4 ? "eager" : "lazy"}
+                                    class="h-14 w-14 shrink-0 rounded-md bg-zinc-200 object-cover dark:bg-zinc-800"
+                                />
+                            ) : (
+                                <span
+                                    class="h-14 w-14 shrink-0 rounded-md bg-zinc-200 dark:bg-zinc-800"
+                                    aria-hidden="true"
+                                />
+                            )}
+                            <span class="min-w-0 flex-1">
+                                <span class="block truncate font-semibold text-black group-hover:underline dark:text-white">
+                                    {track.title}
+                                </span>
+                                <span class="block truncate text-sm text-zinc-600 dark:text-zinc-400">
+                                    {track.artist}
+                                </span>
+                                <span class="block truncate text-xs text-zinc-500 dark:text-zinc-400">
+                                    {track.album}
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                ))}
+            </ol>
+        ) : (
+            <div class="rounded-lg border border-zinc-200 p-6 text-center dark:border-zinc-800">
+                <p class="text-black dark:text-white">
+                    I could not load my top tracks right now. Please try again later.
+                </p>
+            </div>
+        )}
+    </PageLayout>
+</AppLayout>

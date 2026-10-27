@@ -20,7 +20,7 @@ export const buildAuthorizationUrl = ({ clientId, state }) => {
         client_id: clientId,
         redirect_uri: REDIRECT_URI,
         response_type: "code",
-        scope: "user-read-currently-playing",
+        scope: "user-read-currently-playing user-top-read",
         show_dialog: "true",
         state,
     }).toString();

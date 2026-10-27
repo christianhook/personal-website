@@ -205,6 +205,102 @@ describe("Spotify token refresh", () => {
         );
     });
 
+    it("maps top tracks and caches them in KV", async () => {
+        const kv = new MemoryKv();
+        const fetchMock = vi
+            .fn<typeof fetch>()
+            .mockResolvedValueOnce(tokenResponse())
+            .mockResolvedValueOnce(
+                new Response(
+                    JSON.stringify({
+                        items: [
+                            {
+                                album: {
+                                    images: [
+                                        {
+                                            url: "https://i.scdn.co/image/small.jpg",
+                                            width: 64,
+                                        },
+                                        {
+                                            url: "https://i.scdn.co/image/medium.jpg",
+                                            width: 300,
+                                        },
+                                        {
+                                            url: "https://i.scdn.co/image/large.jpg",
+                                            width: 640,
+                                        },
+                                    ],
+                                    name: "First Album",
+                                },
+                                artists: [{ name: "First Artist" }],
+                                external_urls: {
+                                    spotify: "https://open.spotify.com/track/first",
+                                },
+                                name: "First Song",
+                            },
+                            {
+                                album: {
+                                    images: [
+                                        {
+                                            url: "https://i.scdn.co/image/second.jpg",
+                                            width: 640,
+                                        },
+                                    ],
+                                    name: "Second Album",
+                                },
+                                artists: [{ name: "Second Artist" }, { name: "Guest" }],
+                                external_urls: {
+                                    spotify: "https://open.spotify.com/track/second",
+                                },
+                                name: "Second Song",
+                            },
+                        ],
+                    }),
+                    { headers: { "Content-Type": "application/json" }, status: 200 }
+                )
+            );
+        vi.stubGlobal("fetch", fetchMock);
+        const { getTopTracks } = await loadSpotify();
+
+        expect(await getTopTracks(credentials, kv)).toEqual([
+            {
+                album: "First Album",
+                albumImageUrl: "https://i.scdn.co/image/medium.jpg",
+                artist: "First Artist",
+                songUrl: "https://open.spotify.com/track/first",
+                title: "First Song",
+            },
+            {
+                album: "Second Album",
+                albumImageUrl: "https://i.scdn.co/image/second.jpg",
+                artist: "Second Artist, Guest",
+                songUrl: "https://open.spotify.com/track/second",
+                title: "Second Song",
+            },
+        ]);
+        expect(JSON.parse(kv.values.get("spotify:top-tracks") ?? "[]")).toHaveLength(2);
+
+        await getTopTracks(credentials, kv);
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
+    it("returns an empty list when Spotify rejects the top-tracks request", async () => {
+        const fetchMock = vi
+            .fn<typeof fetch>()
+            .mockResolvedValueOnce(tokenResponse())
+            .mockResolvedValueOnce(new Response(null, { status: 403 }));
+        vi.stubGlobal("fetch", fetchMock);
+        const { getTopTracks } = await loadSpotify();
+
+        expect(await getTopTracks(credentials)).toEqual([]);
+        expect(console.error).toHaveBeenCalledWith(
+            expect.objectContaining({
+                event: "spotify_top_tracks_failed",
+                status: 403,
+            })
+        );
+    });
+
     it("maps a currently playing track and caches it in KV", async () => {
         const kv = new MemoryKv();
         const fetchMock = vi
