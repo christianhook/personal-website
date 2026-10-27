@@ -2,7 +2,6 @@
 import Spotify from "../../components/spotify/Spotify.astro";
 import SpotifyFallback from "../../components/spotify/SpotifyFallback.astro";
 import TimeDisplay from "../../components/time/TimeDisplay.astro";
-import TimeDisplayFallback from "../../components/time/TimeDisplayFallback.astro";
 ---
 
 <footer class="flex flex-col items-center w-full">
@@ -15,9 +14,7 @@ import TimeDisplayFallback from "../../components/time/TimeDisplayFallback.astro
                 </Spotify>
             </div>
             <div class="w-full md:w-auto">
-                <TimeDisplay server:defer>
-                    <TimeDisplayFallback slot="fallback" />
-                </TimeDisplay>
+                <TimeDisplay />
             </div>
         </div>
     </div>
