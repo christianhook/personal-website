@@ -17,7 +17,7 @@ describe("Spotify authorization helper", () => {
             client_id: "client-id",
             redirect_uri: "http://127.0.0.1:8888/callback",
             response_type: "code",
-            scope: "user-read-currently-playing",
+            scope: "user-read-currently-playing user-top-read",
             show_dialog: "true",
             state: "secure-state",
         });

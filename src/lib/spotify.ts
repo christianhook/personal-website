@@ -1,8 +1,12 @@
 const NOW_PLAYING_ENDPOINT = "https://api.spotify.com/v1/me/player/currently-playing";
+const TOP_TRACKS_ENDPOINT =
+    "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10";
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 const NOW_PLAYING_CACHE_KEY = "spotify:now-playing";
+const TOP_TRACKS_CACHE_KEY = "spotify:top-tracks";
 const INVALID_REFRESH_TOKEN_KEY = "spotify:invalid-refresh-token";
 const NOW_PLAYING_TTL_MS = 30_000;
+const TOP_TRACKS_TTL_MS = 60 * 60 * 1000;
 const ACCESS_TOKEN_EXPIRY_BUFFER_MS = 60_000;
 
 let cachedAccessToken: string | null = null;
@@ -10,6 +14,8 @@ let cachedAccessTokenFingerprint: string | null = null;
 let tokenExpiryTime: number | null = null;
 let cachedNowPlaying: NowPlayingSong | null = null;
 let nowPlayingCacheExpiry: number | null = null;
+let cachedTopTracks: TopTrack[] | null = null;
+let topTracksCacheExpiry: number | null = null;
 
 const rejectedRefreshTokenFingerprints = new Set<string>();
 const refreshesInFlight = new Map<string, Promise<string | null>>();
@@ -66,6 +72,8 @@ const clearSpotifyCaches = (): void => {
     tokenExpiryTime = null;
     cachedNowPlaying = null;
     nowPlayingCacheExpiry = null;
+    cachedTopTracks = null;
+    topTracksCacheExpiry = null;
 };
 
 const persistInvalidRefreshToken = async (
@@ -324,5 +332,140 @@ export const getNowPlaying = async (
             event: "spotify_now_playing_failed",
         });
         return EMPTY_RESPONSE;
+    }
+};
+
+export interface TopTrack {
+    album: string;
+    albumImageUrl: string;
+    artist: string;
+    songUrl: string;
+    title: string;
+}
+
+const isTopTrack = (value: unknown): value is TopTrack => {
+    if (!value || typeof value !== "object") return false;
+    const track = value as Record<string, unknown>;
+    return (
+        typeof track.album === "string" &&
+        typeof track.albumImageUrl === "string" &&
+        typeof track.artist === "string" &&
+        typeof track.songUrl === "string" &&
+        typeof track.title === "string"
+    );
+};
+
+const isTopTracks = (value: unknown): value is TopTrack[] =>
+    Array.isArray(value) && value.every(isTopTrack);
+
+const mapTopTrack = (value: unknown): TopTrack | null => {
+    if (!value || typeof value !== "object") return null;
+
+    const item = value as {
+        album?: { images?: Array<{ url?: string; width?: number }>; name?: string };
+        artists?: Array<{ name?: string }>;
+        external_urls?: { spotify?: string };
+        name?: string;
+    };
+
+    if (typeof item.name !== "string") return null;
+
+    // Prefer the smallest artwork that is still sharp at the size we render it.
+    const image =
+        [...(item.album?.images ?? [])]
+            .filter((candidate) => typeof candidate.url === "string")
+            .sort((a, b) => (a.width ?? 0) - (b.width ?? 0))
+            .find((candidate) => (candidate.width ?? 0) >= 300) ?? item.album?.images?.[0];
+
+    return {
+        album: item.album?.name ?? "",
+        albumImageUrl: typeof image?.url === "string" ? image.url : "",
+        artist:
+            item.artists
+                ?.map((artist) => artist.name)
+                .filter((name): name is string => typeof name === "string")
+                .join(", ") ?? "",
+        songUrl: item.external_urls?.spotify ?? "",
+        title: item.name,
+    };
+};
+
+/**
+ * Returns the user's most-played tracks from Spotify's "short term" window,
+ * which currently covers roughly the last four weeks.
+ */
+export const getTopTracks = async (
+    credentials: SpotifyCredentials,
+    kv?: SpotifyKvStore
+): Promise<TopTrack[]> => {
+    const currentTime = Date.now();
+
+    if (cachedTopTracks && topTracksCacheExpiry && currentTime < topTracksCacheExpiry) {
+        return cachedTopTracks;
+    }
+
+    if (kv) {
+        try {
+            const kvCached = await kv.get(TOP_TRACKS_CACHE_KEY, "json");
+            if (isTopTracks(kvCached)) {
+                cachedTopTracks = kvCached;
+                topTracksCacheExpiry = currentTime + TOP_TRACKS_TTL_MS;
+                return kvCached;
+            }
+        } catch {
+            // KV read failed, fall through to Spotify.
+        }
+    }
+
+    try {
+        const accessToken = await getAccessToken(credentials, kv);
+        if (!accessToken) return [];
+
+        const response = await fetch(TOP_TRACKS_ENDPOINT, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            cache: "no-store",
+        });
+
+        if (!response.ok) {
+            console.error({
+                event: "spotify_top_tracks_failed",
+                status: response.status,
+            });
+            return [];
+        }
+
+        const data: unknown = await response.json();
+        if (!data || typeof data !== "object" || !("items" in data) || !Array.isArray(data.items)) {
+            return [];
+        }
+
+        const tracks = data.items
+            .map(mapTopTrack)
+            .filter((track): track is TopTrack => track !== null);
+
+        if (tracks.length === 0) return [];
+
+        cachedTopTracks = tracks;
+        topTracksCacheExpiry = currentTime + TOP_TRACKS_TTL_MS;
+
+        if (kv) {
+            try {
+                await kv.put(TOP_TRACKS_CACHE_KEY, JSON.stringify(tracks), {
+                    expirationTtl: TOP_TRACKS_TTL_MS / 1000,
+                });
+            } catch {
+                // KV caching is best effort.
+            }
+        }
+
+        return tracks;
+    } catch (error) {
+        console.error({
+            error: error instanceof Error ? error.message : "unknown_error",
+            event: "spotify_top_tracks_failed",
+        });
+        return [];
     }
 };
